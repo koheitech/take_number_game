@@ -5,27 +5,31 @@
       :showDescription="showDescription"
     />
   <div v-show="showDescription" class="description">
-    <h1>Game Description:</h1>
-    <p>At the beginning of the game, the numerical string "-1 1 2 3 4" is given and each player has a score of 0.
+    <h1 class="centered-text">Game Description:</h1>
+    <p>At the beginning of the game, the numerical string "4 3 2 1 -1" is given and each player has a score of 0.
     The players make moves sequentially by removing one number from the numerical string and adding it to the player's current score.
     The game ends when one number is left in the numerical string.
-    The player with a score of 6 loses the game. If the score is equal, the game is a draw.
+    The player with a score of 7 loses the game. If the score is equal, the game is a draw.
     In all other cases, the player with the highest score wins the game.</p>
   </div>
-  <Game v-if="isPlaying"/>
+  <Game v-if="isPlaying" :isCPUfirst="isCPUfirst" @end="endGame"/>
   <div v-if="isFinished">
     <h1>Result:</h1>
-    <h2>You loose....</h2>
-    <h2 >Do you want to play again? Why not??</h2>
+    <h2>{{ result }}</h2>
+    <div class="score">
+      <h3>CPU score: {{ scoreForPlayer1 }}</h3>
+      <h3>Your score: {{ scoreForPlayer2 }}</h3>
+    </div>
+    <h3>Do you want to play again? Why not??</h3>
   </div>
   <div v-if="!isPlaying">
     <Button 
         text="Start from Me"
-        @click="startGame"
+        @click="startGame(isCPUfirst=false)"
     />
     <Button 
         text="Start from CPU"
-        @click="startGame"
+        @click="startGame(isCPUfirst=true)"
     />
   </div>
 </template>
@@ -47,15 +51,28 @@ export default {
       title: 'Take Number',
       showDescription: true,
       isPlaying: false,
-      isFinished: false
+      isFinished: false,
+      isCPUfirst: false,
+      result: '',
+      scoreForPlayer1: 0,
+      scoreForPlayer2: 0,
     };
   },
   methods: {
     toggleDescription() {
       this.showDescription = !this.showDescription
     },
-    startGame() {
-      this.isPlaying = true
+    startGame(isCPUfirst) {
+      this.isPlaying = true,
+      this.isFinished = false,
+      this.isCPUfirst = isCPUfirst
+    },
+    endGame([result, scoreForPlayer1, scoreForPlayer2]) {
+      this.result = result
+      this.scoreForPlayer1 = scoreForPlayer1
+      this.scoreForPlayer2 = scoreForPlayer2
+      this.isFinished = true
+      this.isPlaying = false
     }
   },
 }
@@ -79,5 +96,13 @@ export default {
   border: 1px solid darkgrey;
   padding: 30px;
   border-radius: 5px;
+}
+.centered-text {
+  text-align: center;
+}
+.score {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 </style>
