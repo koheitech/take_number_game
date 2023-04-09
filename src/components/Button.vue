@@ -21,7 +21,7 @@ props: {
 <style>
 .btn {
   display: inline-block;
-  background: #000;
+  background: #015551;
   color: #fff;
   border: none;
   padding: 10px 20px;

@@ -4,7 +4,7 @@
       :title="title"
       :showDescription="showDescription"
     />
-  <div  v-show="showDescription" class="description">
+  <div v-show="showDescription" class="description">
     <h1>Game Description:</h1>
     <p>At the beginning of the game, the numerical string "-1 1 2 3 4" is given and each player has a score of 0.
     The players make moves sequentially by removing one number from the numerical string and adding it to the player's current score.
@@ -12,20 +12,31 @@
     The player with a score of 6 loses the game. If the score is equal, the game is a draw.
     In all other cases, the player with the highest score wins the game.</p>
   </div>
+  <div v-if="!isPlaying">
+    <Button 
+        text="Start from Me"
+    />
+    <Button 
+        text="Start from CPU"
+    />
+  </div>
 </template>
 
 <script>
 import Header from "./components/Header";
+import Button from "./components/Button";
 
 export default {
   name: 'App',
   components: {
     Header,
+    Button,
   },
   data() {
     return {
       title: 'Take Number',
-      showDescription: true
+      showDescription: true,
+      isPlaying: false
     };
   },
   methods: {

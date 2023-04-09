@@ -4,8 +4,8 @@
       <Button 
         @btn-click="$emit('toggle-description')"
         :text="showDescription ? 'Hide Description' : 'Show Description'"
-        :color="showDescription ? 'black' : 'darkgray'"
-    />
+        :color="showDescription ? 'black' : ''"
+      />
     </header>
 </template>
 
