@@ -1,13 +1,24 @@
 <template>
-  <h1>hello</h1>
+  <Header
+      :title="title"
+    />
 </template>
 
 <script>
+import Header from "./components/Header";
 
 export default {
   name: 'App',
   components: {
-  }
+    Header,
+  },
+  data() {
+    return {
+      title: 'Take Number'
+    };
+  },
+  methods: {
+  },
 }
 </script>
 
