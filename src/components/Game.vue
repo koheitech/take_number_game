@@ -5,8 +5,14 @@
         </div>
     </div>
     <div class="score">
-        <h2>CPU score: {{ scoreForPlayer1 }}</h2>
-        <h2>Your score: {{ scoreForPlayer2 }}</h2>
+        <div v-if="isCPUfirst">
+            <h2>CPU score: {{ scoreForPlayer1 }}</h2>
+            <h2>Your score: {{ scoreForPlayer2 }}</h2>
+        </div>
+        <div v-else>
+            <h2>CPU score: {{ scoreForPlayer2 }}</h2>
+            <h2>Your score: {{ scoreForPlayer1 }}</h2>
+        </div>
     </div>
 </template>
 
@@ -22,14 +28,15 @@ export default {
             result: '',
             scoreForPlayer1: 0,
             scoreForPlayer2: 0,
-            isPlayer1: this.isCPUfirst
+            isCPUTurn: false,
         }
     },
     props: {
         isCPUfirst: Boolean,
     },
     mounted() {
-        if (this.isPlayer1) {
+        if (this.isCPUfirst) {
+            this.isCPUTurn = true
             this.chooseCPUmove()
         }
     },
@@ -37,28 +44,35 @@ export default {
         chooseNum(num) {
             this.numbers = this.numbers.filter(item => num !== item )
 
-            if (this.isPlayer1)
-                this.scoreForPlayer1 += num
-            else
-                this.scoreForPlayer2 += num
-            
-            this.isPlayer1 = !this.isPlayer1
+            if (this.isCPUTurn) {
+                if (this.isCPUfirst)
+                    this.scoreForPlayer1 += num
+                else
+                    this.scoreForPlayer2 += num
+            } else {
+                if (this.isCPUfirst)
+                    this.scoreForPlayer2 += num
+                else
+                    this.scoreForPlayer1 += num
+            }
+
+            this.isCPUTurn = !this.isCPUTurn
 
             if (this.isGameFinished()) {
                 this.checkResult()
                 return;
             }
 
-            if (this.isPlayer1)
+            if (this.isCPUTurn)
                 this.chooseCPUmove()
         },
         chooseCPUmove() {
             const currentState = {
                 givenNumbers: this.numbers,
                 scoreForPlayer1: this.scoreForPlayer1,
-                scoreForPlayer2: this.scoreForPlayer2,
+                scoreForPlayer2: this.scoreForPlayer2
             }
-            const result = alphaBeta(currentState, currentState.givenNumbers.length - 1, -Infinity, Infinity, this.isPlayer1)
+            const result = alphaBeta(currentState, currentState.givenNumbers.length - 1, -Infinity, Infinity, this.isCPUfirst)
             const takenNumber = findTakenNumber(currentState, result.move);
             console.log("best number to take: ", takenNumber);
 
@@ -68,14 +82,29 @@ export default {
             return this.numbers.length === 1
         },
         checkResult() {
-            if (this.scoreForPlayer1 == this.scoreForPlayer2)
+            if (this.scoreForPlayer1 == this.scoreForPlayer2) {
                 this.result = 'Draw!'
-            else if (this.scoreForPlayer2 === 7)
-                this.result = 'CPU win!'
-            else if (this.scoreForPlayer2 > this.scoreForPlayer1)
-                this.result = 'You win!'
-            else 
-                this.result = 'CPU win!'
+                this.$emit("end", [this.result, this.scoreForPlayer1, this.scoreForPlayer2])
+                return
+            }
+                
+            if (this.isCPUfirst) {
+                // Then, CPU is player1
+                if (this.scoreForPlayer1 === 7)
+                    this.result = 'You win!'
+                else if (this.scoreForPlayer1 > this.scoreForPlayer2)
+                    this.result = 'CPU win!'
+                else
+                    this.result = 'You win!'
+            } else {
+                // Then, Human is player1
+                if (this.scoreForPlayer1 === 7)
+                    this.result = 'CPU win!'
+                else if (this.scoreForPlayer1 > this.scoreForPlayer2)
+                    this.result = 'You win!'
+                else
+                    this.result = 'CPU win!'
+            }
 
             this.$emit("end", [this.result, this.scoreForPlayer1, this.scoreForPlayer2])
         }

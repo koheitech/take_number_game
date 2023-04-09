@@ -9,11 +9,11 @@ function getScore(node) {
     return 0;
 }
 
-function generateChildren(node, isPlayer1) {
+function generateChildren(node, isMaximizer) {
     return node.givenNumbers.map((number, index) => {
         const newNumbers = node.givenNumbers.slice(0, index).concat(node.givenNumbers.slice(index + 1));
-        const newScoreForPlayer1 = isPlayer1 ? node.scoreForPlayer1 + number : node.scoreForPlayer1;
-        const newScoreForPlayer2 = isPlayer1 ? node.scoreForPlayer2 : node.scoreForPlayer2 + number;
+        const newScoreForPlayer1 = isMaximizer ? node.scoreForPlayer1 + number : node.scoreForPlayer1;
+        const newScoreForPlayer2 = isMaximizer ? node.scoreForPlayer2 : node.scoreForPlayer2 + number;
 
         return {
             givenNumbers: newNumbers,
@@ -23,15 +23,15 @@ function generateChildren(node, isPlayer1) {
     });
 }
 
-export function alphaBeta(node, depth, alpha, beta, isPlayer1) {
+export function alphaBeta(node, depth, alpha, beta, isMaximizer) {
     if (depth === 0) {
         return { score: getScore(node), move: null };
     }
 
-    const children = generateChildren(node, isPlayer1);
+    const children = generateChildren(node, isMaximizer);
     let bestMove;
 
-    if (isPlayer1) {
+    if (isMaximizer) {
         let bestScore = -Infinity;
         for (const child of children) {
             const evaluation = alphaBeta(child, depth - 1, alpha, beta, false).score;

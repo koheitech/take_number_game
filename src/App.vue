@@ -17,8 +17,14 @@
     <h1>Result:</h1>
     <h2>{{ result }}</h2>
     <div class="score">
-      <h3>CPU score: {{ scoreForPlayer1 }}</h3>
-      <h3>Your score: {{ scoreForPlayer2 }}</h3>
+      <div v-if="isCPUfirst">
+        <h3>CPU score: {{ scoreForPlayer1 }}</h3>
+        <h3>Your score: {{ scoreForPlayer2 }}</h3>
+      </div>
+      <div v-else>
+        <h3>CPU score: {{ scoreForPlayer2 }}</h3>
+        <h3>Your score: {{ scoreForPlayer1 }}</h3>
+      </div>
     </div>
     <h3>Do you want to play again? Why not??</h3>
   </div>
