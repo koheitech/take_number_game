@@ -15,22 +15,27 @@
   <div v-if="!isPlaying">
     <Button 
         text="Start from Me"
+        @click="startGame"
     />
     <Button 
         text="Start from CPU"
+        @click="startGame"
     />
   </div>
+  <Game v-if="isPlaying"/>
 </template>
 
 <script>
 import Header from "./components/Header";
 import Button from "./components/Button";
+import Game from "./components/Game";
 
 export default {
   name: 'App',
   components: {
     Header,
     Button,
+    Game
   },
   data() {
     return {
@@ -42,6 +47,9 @@ export default {
   methods: {
     toggleDescription() {
       this.showDescription = !this.showDescription
+    },
+    startGame() {
+      this.isPlaying = true
     }
   },
 }
