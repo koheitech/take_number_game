@@ -12,6 +12,12 @@
     The player with a score of 6 loses the game. If the score is equal, the game is a draw.
     In all other cases, the player with the highest score wins the game.</p>
   </div>
+  <Game v-if="isPlaying"/>
+  <div v-if="isFinished">
+    <h1>Result:</h1>
+    <h2>You loose....</h2>
+    <h2 >Do you want to play again? Why not??</h2>
+  </div>
   <div v-if="!isPlaying">
     <Button 
         text="Start from Me"
@@ -22,7 +28,6 @@
         @click="startGame"
     />
   </div>
-  <Game v-if="isPlaying"/>
 </template>
 
 <script>
@@ -41,7 +46,8 @@ export default {
     return {
       title: 'Take Number',
       showDescription: true,
-      isPlaying: false
+      isPlaying: false,
+      isFinished: false
     };
   },
   methods: {
