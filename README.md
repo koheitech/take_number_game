@@ -1,5 +1,5 @@
 # fai_prac-1_taking_number
-This is v1
+This is v2
 
 ## Project setup
 ```
