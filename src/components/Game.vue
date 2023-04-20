@@ -1,3 +1,6 @@
+<!-- 
+  This component is responsible for the GUI of game logic
+-->
 <template>
     <div class="button-container">
         <div v-for="(number, index) in numbers" :key="index">

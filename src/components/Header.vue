@@ -1,3 +1,6 @@
+<!-- 
+  This component is responsible for the GUI of header
+-->
 <template>
     <header>
       <h1>{{ title }}</h1>

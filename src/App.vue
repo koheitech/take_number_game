@@ -1,3 +1,15 @@
+<!-- 
+  This is the entrypoint of game's GUI.
+  Several components responsible for specific task is rendered to this components.
+  
+  App.vue
+  |
+  |------- Header
+  |------- Game
+  |------- Button
+
+  The main logic of game is `./alpha-beta-pruning.js`
+-->
 <template>
   <Header
       @toggle-description="toggleDescription"

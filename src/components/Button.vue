@@ -1,3 +1,6 @@
+<!-- 
+  This component is responsible for the GUI of buttons in the game
+-->
 <template>
     <button
         @click="$emit('btn-click')"
