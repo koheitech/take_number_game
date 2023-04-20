@@ -2,8 +2,8 @@ function getScore(node) {
     const scoreForPlayer1 = node.scoreForPlayer1;
     const scoreForPlayer2 = node.scoreForPlayer2;
 
-    if (scoreForPlayer1 === 7) return -1;
-    if (scoreForPlayer2 === 7) return 1;
+    if (scoreForPlayer1 >= 9) return -1;
+    if (scoreForPlayer2 >= 9) return 1;
     if (scoreForPlayer1 > scoreForPlayer2) return 1;
     if (scoreForPlayer2 > scoreForPlayer1) return -1;
     return 0;
@@ -58,13 +58,14 @@ export function alphaBeta(node, depth, alpha, beta, isMaximizer) {
     }
 }
 
-export function findTakenNumber(originalNode, bestMoveNode) {
-    const originalNumbers = new Set(originalNode.givenNumbers);
-    const bestMoveNumbers = new Set(bestMoveNode.givenNumbers);
+export function findTakenNumber(previousNumbers, currentNumbers) {
 
-    for (const number of originalNumbers) {
-        if (!bestMoveNumbers.has(number)) {
-            return number;
+    for (let i = 0; i < currentNumbers.length; i++) {
+        const index = previousNumbers.indexOf(currentNumbers[i]);
+        if (index !== -1) {
+            previousNumbers.splice(index, 1);
         }
     }
+
+    return previousNumbers.pop();
 }

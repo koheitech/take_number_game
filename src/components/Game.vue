@@ -1,7 +1,7 @@
 <template>
     <div class="button-container">
-        <div v-for="num in numbers" :key="num">
-            <button class="square-button" @click="chooseNum(num)">{{ num }}</button>
+        <div v-for="(number, index) in numbers" :key="index">
+            <button class="square-button" @click="chooseNum(number)">{{ number }}</button>
         </div>
     </div>
     <div class="score">
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-const InitialNumbers = [4, 3, 2, 1, -1]
+const InitialNumbers = [4, 3, 3, 2, 2, 1, -1]
 
 import { alphaBeta, findTakenNumber } from '../alpha-beta-pruning'
 
@@ -42,8 +42,8 @@ export default {
     },
     methods: {
         chooseNum(num) {
-            this.numbers = this.numbers.filter(item => num !== item )
-
+            this.numbers.splice(this.numbers.indexOf(num), 1)
+            
             if (this.isCPUTurn) {
                 if (this.isCPUfirst)
                     this.scoreForPlayer1 += num
@@ -73,8 +73,8 @@ export default {
                 scoreForPlayer2: this.scoreForPlayer2
             }
             const result = alphaBeta(currentState, currentState.givenNumbers.length - 1, -Infinity, Infinity, this.isCPUfirst)
-            const takenNumber = findTakenNumber(currentState, result.move);
-            console.log("best number to take: ", takenNumber);
+            const takenNumber = findTakenNumber(Array.from(currentState.givenNumbers), Array.from(result.move.givenNumbers));
+            // console.log("best number to take: ", takenNumber);
 
             this.chooseNum(takenNumber)
         },
@@ -87,19 +87,23 @@ export default {
                 this.$emit("end", [this.result, this.scoreForPlayer1, this.scoreForPlayer2])
                 return
             }
-                
+
             if (this.isCPUfirst) {
                 // Then, CPU is player1
-                if (this.scoreForPlayer1 === 7)
+                if (this.scoreForPlayer1 >= 9)
                     this.result = 'You win!'
+                else if (this.scoreForPlayer2 >= 9)
+                    this.result = 'CPU win!'
                 else if (this.scoreForPlayer1 > this.scoreForPlayer2)
                     this.result = 'CPU win!'
                 else
                     this.result = 'You win!'
             } else {
                 // Then, Human is player1
-                if (this.scoreForPlayer1 === 7)
+                if (this.scoreForPlayer1 >= 9)
                     this.result = 'CPU win!'
+                else if (this.scoreForPlayer2 >= 9)
+                    this.result = 'You win!'
                 else if (this.scoreForPlayer1 > this.scoreForPlayer2)
                     this.result = 'You win!'
                 else
@@ -115,6 +119,7 @@ export default {
 <style>
 .button-container {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
 }
